@@ -147,7 +147,7 @@ def episode_data(slug, n):
 # videoid boleh string (berlaku umum) atau dict per-episode yg terkonfirmasi
 DMFALLBACK = {
  "satou": "xbje77m",
- "doumo-suki-na-hito-ni-horegusuri-wo-irai-sareta-majo-desu": "xbijxcu",
+ "doumo-suki-na-hito-ni-horegusuri-wo-irai-sareta-majo-desu": {"1": "xbijxcu"},
  "sekai-saikyou-no-majo-hajimemashita": "xbkceem",
  "seitokai-ni-mo-ana-wa-aru": "xbl27di",
  "kyouran": "xbje6z6",
