@@ -447,6 +447,7 @@
 
 <script src="sokuja-data.js?v=8" defer onload="mergeEps()"></script>
 <script src="nyaa-data.js?v=1" defer></script>
+<script src="tio-data.js?v=1" defer></script>
 <script>
 const BUILD="b15";
 const IMG = (seed,w=400,h=520)=>`https://picsum.photos/seed/${seed}/${w}/${h}`;
@@ -862,6 +863,7 @@ async function selfUpdate(){
 function closePlayer(){const v=document.getElementById("plVideo");try{clearTimeout(plStallT);}catch(e){}try{clearTimeout(plRetryT);}catch(e){}try{v.pause();v.removeAttribute("src");v.load();}catch(e){}dmMode(false);const p=document.getElementById("playerBg");if(p){try{p.classList.remove("show")}catch(e){}p.style.display="none";}plCur=null;try{localStorage.removeItem("guoke_player")}catch(e){}ovClose("player");}
 function vdSaveScroll(){const p=document.getElementById("videoPage");if(!p)return;try{vdScroll[vdTab]=p.scrollTop||0}catch(e){}}
 function torList(){try{const T=(typeof TOR!=="undefined"?TOR:{});const k=current&&skOf(current);const e=(k&&T[k])||{};return e;}catch(err){return{};}}
+function tioList(){try{const T=(typeof TIO!=="undefined"?TIO:{});const k=current&&skOf(current);const e=(k&&T[k])||{};return e;}catch(err){return{};}}
 function vdSetTab(t){vdSaveScroll();vdTab=t;renderVd();}
 function vdSetSeason(s){vdSaveScroll();vdSeasonN=s;renderVd();toast("Season "+s);}
 function renderVd(){
@@ -871,7 +873,9 @@ function renderVd(){
   if(vdTab==="INFO"){
     const te=torList(),tks=Object.keys(te);
     const torHTML=tks.length?`<h4 style="margin:16px 0 10px">⬇ Unduh Torrent <small style="color:#888;font-weight:400">(Nyaa)</small></h4>`+tks.slice(0,14).map(function(k){const t=te[k];return `<div class="vd-tor"><b>${k==="batch"?"Batch":("Ep "+k)}</b><small>${t.size||""} • 🌱${t.seed||"0"}</small><a href="${t.magnet}">🧲 Unduh</a></div>`;}).join(""):"";
-    document.getElementById("vdBody").innerHTML=`<div class="vd-info"><p>${current.desc||""}</p><div class="vd-meta"><div><span>Status</span><b>FINISHED</b></div><div><span>Tipe</span><b>SERIES</b></div><div><span>Genre</span><b>${current.genre||"Action"}</b></div>${current.score?`<div><span>Skor Sokuja</span><b>★ ${current.score}</b></div>`:""}<div><span>Views</span><b>${current.views||"-"}</b></div><div><span>Favorit</span><b>${current.fav||"-"}</b></div></div><button class="btn-play" style="margin-top:14px" onclick="vdWatch()">▶ Tonton Sekarang</button>${torHTML}</div>`;
+    const ti=tioList(),tks2=Object.keys(ti).sort(function(a,b){return b-a;}).slice(0,8);
+    const tioHTML=tks2.length?`<h4 style="margin:16px 0 10px">🧲 Torrentio <small style="color:#888;font-weight:400">(magnet global)</small></h4>`+tks2.map(function(k){return (ti[k]||[]).slice(0,2).map(function(t){return `<div class="vd-tor"><b>Ep ${k}</b><small>${t.src||"P2P"} • ${t.size||""} • 🌱${t.seed||"0"}</small><a href="${t.magnet}">🧲 Unduh</a></div>`;}).join("");}).join(""):"";
+    document.getElementById("vdBody").innerHTML=`<div class="vd-info"><p>${current.desc||""}</p><div class="vd-meta"><div><span>Status</span><b>FINISHED</b></div><div><span>Tipe</span><b>SERIES</b></div><div><span>Genre</span><b>${current.genre||"Action"}</b></div>${current.score?`<div><span>Skor Sokuja</span><b>★ ${current.score}</b></div>`:""}<div><span>Views</span><b>${current.views||"-"}</b></div><div><span>Favorit</span><b>${current.fav||"-"}</b></div></div><button class="btn-play" style="margin-top:14px" onclick="vdWatch()">▶ Tonton Sekarang</button>${torHTML}${tioHTML}</div>`;
   }else if(vdTab==="SEASON"){
     document.getElementById("vdBody").innerHTML=[1,2,3].map(s=>`<div class="vd-season ${s===vdSeasonN?'active':''}" onclick="vdSetSeason(${s})"><img loading="lazy" src="${current.img}" alt="Season ${s}"/><div><b>Season ${s}</b><br/><small>${total} Episode${s===vdSeasonN?" • ditonton":""}</small></div></div>`).join("");
   }else{
