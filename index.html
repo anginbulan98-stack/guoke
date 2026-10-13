@@ -445,7 +445,7 @@
   <div id="setList"></div>
 </div></div>
 
-<script src="sokuja-data.js?v=7" defer onload="mergeEps()"></script>
+<script src="sokuja-data.js?v=8" defer onload="mergeEps()"></script>
 <script src="nyaa-data.js?v=1" defer></script>
 <script>
 const BUILD="b15";
@@ -786,7 +786,7 @@ function plRenderQuals(){
   if(qs.length&&!plSources()[plQ]&&plQ!=="DM")plQ=qs[0];
   box.innerHTML=qs.map(q=>`<button class="${q===plQ?'active':''}" onclick="plSetQ('${q}')">${q}</button>`).join("")+(plAlt()?`<button class="${plQ==="DM"?'active':''}" onclick="plSetQ('DM')">▶ DM</button>`:"");
 }
-function plAlt(){try{if(!plCur)return null;const a=getAny(plCur.id);if(!a)return null;const M=MDB();const e=M[skOf(a)]||{};return e.alt||null;}catch(err){return null;}}
+function plAlt(){try{if(!plCur)return null;const a=getAny(plCur.id);if(!a)return null;const e=(MDB()[skOf(a)]||{}).alt;if(!e)return null;if(typeof e==="object")return e[String(plCur.n)]||null;return e;}catch(err){return null;}}
 function dmMode(on,id){const v=document.getElementById("plVideo"),f=document.getElementById("plFrame");if(v)v.style.display=on?"none":"block";if(f){if(on&&id){try{f.src="https://geo.dailymotion.com/player.html?video="+id;}catch(e){}}else{try{f.removeAttribute("src");}catch(e){}f.style.display="none";}if(on)f.style.display="block";}showLoad(false);hideErr();}
 function plSetQ(q){plQ=q;plRenderQuals();if(q==="DM"){const a=plAlt();if(a){dmMode(true,String(a).replace(/^dm:/,""));toast("Sumber Dailymotion ▶");}else dmMode(false);}else{dmMode(false);plStart();}}
 function autoQuality(sources){

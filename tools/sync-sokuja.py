@@ -143,13 +143,17 @@ def episode_data(slug, n):
     return n2, r
 
 
-# sumber cadangan Dailymotion (kurasi manual, id video → series key)
+# sumber cadangan Dailymotion (kurasi manual: series key -> videoid ATAU {ep: videoid})
+# videoid boleh string (berlaku umum) atau dict per-episode yg terkonfirmasi
 DMFALLBACK = {
  "satou": "xbje77m",
  "doumo-suki-na-hito-ni-horegusuri-wo-irai-sareta-majo-desu": "xbijxcu",
  "sekai-saikyou-no-majo-hajimemashita": "xbkceem",
  "seitokai-ni-mo-ana-wa-aru": "xbl27di",
  "kyouran": "xbje6z6",
+ "slime": {"2": "xac5sb2", "3": "xac5sbo"},
+ "kizoku": {"2": "x8lgkyq"},
+ "chitose": {"1": "xa5hmd8"},
 }
 
 
@@ -263,7 +267,7 @@ def main():
             print(f"{key}: film tanpa video, lewati", flush=True)
     for _k, _v in DMFALLBACK.items():
         if _k in SMETA:
-            SMETA[_k]["alt"] = "dm:" + _v
+            SMETA[_k]["alt"] = ("dm:" + _v) if isinstance(_v, str) else {ek: "dm:" + ev for ek, ev in _v.items()}
     out = ("const SMETA=" + json.dumps(SMETA, separators=(",", ":")) + ";\n"
            + "const SSRC=" + json.dumps(SSRC, separators=(",", ":")) + ";\n"
            + "const SEPL=" + json.dumps(SEPL, separators=(",", ":")) + ";")
